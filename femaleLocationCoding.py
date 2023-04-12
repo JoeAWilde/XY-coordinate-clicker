@@ -24,7 +24,7 @@ def on_mouse_click(event, x, y, flags, param):
         cv2.imshow('Frame', frame)
 
 # Set the directory path containing the frames
-net = "net4"
+net = "net14"
 
 if os.path.exists('F:/'):
     frames_directory = 'F:/OneDrive - University of Exeter/Crab videos/waveMorpho/' + net + '/frames/real frames/female_frames'
