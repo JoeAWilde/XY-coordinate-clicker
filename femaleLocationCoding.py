@@ -27,9 +27,9 @@ def on_mouse_click(event, x, y, flags, param):
 net = "net4"
 
 if os.path.exists('F:/'):
-    frames_directory = 'F:/OneDrive - University of Exeter/Crab videos/waveMorpho/' + net + '/frames/female_frames'
+    frames_directory = 'F:/OneDrive - University of Exeter/Crab videos/waveMorpho/' + net + '/frames/real frames/female_frames'
 else:
-    frames_directory = 'C:/Users/jw777/OneDrive - University of Exeter/Crab videos/waveMorpho/' + net + '/frames/female_frames'
+    frames_directory = 'C:/Users/jw777/OneDrive - University of Exeter/Crab videos/waveMorpho/' + net + '/frames/real frames/female_frames'
 
 #Set the working directory ####
 os.chdir(frames_directory)
