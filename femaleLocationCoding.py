@@ -53,8 +53,10 @@ index = 0
 excel_file = net + 'coordinates.xlsx'
 if os.path.exists(excel_file):
     coordinates_df = pd.read_excel(excel_file)
+    # If the data frame is empty
     if not coordinates_df.empty:
         coordinates = coordinates_df.values.tolist()
+        # Go to the final row as the frame that was last processed
         last_processed_frame = coordinates[-1][0]
         index = frames_list.index(last_processed_frame) + 1
     else:
