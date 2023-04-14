@@ -3,10 +3,15 @@ import os
 import pandas as pd
 import tkinter as tk
 from tkinter import filedialog, simpledialog
+from itertools import cycle
 
 def get_click_coordinates(event, x, y, flags, param):
     if event == cv2.EVENT_LBUTTONDOWN:
+        current_color = next(colors_cycle)
+        participant_colors.append(current_color)
         param.append((x, y))
+        cv2.circle(frame, (x, y), 5, current_color, -1)
+        cv2.imshow(window_name, frame)
 
 def get_video_file():
     root = tk.Tk()
@@ -17,10 +22,16 @@ def get_video_file():
 video_file = get_video_file()
 video = cv2.VideoCapture(video_file)
 frame_count = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
-frame_ratio = int(input("Enter the frame ratio: "))
+
+root = tk.Tk()
+root.withdraw()
+frame_ratio = simpledialog.askinteger("Frame Ratio", "Enter the frame ratio:")
 
 coordinates_df = pd.DataFrame(columns=["Frame", "Participant_ID", "X", "Y"])
 window_name = "Video Frame"
+
+colors_cycle = cycle([(0, 0, 255), (0, 255, 0), (255, 0, 0), (255, 255, 0), (255, 0, 255), (0, 255, 255)])
+participant_colors = []
 
 for index in range(0, frame_count, frame_ratio):
     video.set(cv2.CAP_PROP_POS_FRAMES, index)
@@ -35,9 +46,6 @@ for index in range(0, frame_count, frame_ratio):
     cv2.setMouseCallback(window_name, get_click_coordinates, clicks)
 
     while True:
-        for i, click in enumerate(clicks):
-            cv2.circle(frame, click, 5, (0, 0, 255), -1)
-
         cv2.imshow(window_name, frame)
         key = cv2.waitKey(0) & 0xFF
 
@@ -45,7 +53,7 @@ for index in range(0, frame_count, frame_ratio):
             participant_id = simpledialog.askinteger("Participant ID", "Enter the participant ID:")
             if participant_id is not None:
                 click_coordinates = clicks[-1]
-                coordinates_df = coordinates_df.append({"Frame": index + 1, "Participant_ID": participant_id, "X": click_coordinates[0], "Y": click_coordinates[1]}, ignore_index=True)
+                coordinates_df.loc[len(coordinates_df)] = {"Frame": index + 1, "Participant_ID": participant_id, "X": click_coordinates[0], "Y": click_coordinates[1]}
             else:
                 break
         elif key == 27:  # 'esc' pressed
