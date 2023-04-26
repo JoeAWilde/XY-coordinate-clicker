@@ -6,17 +6,11 @@ import keyboard
 
 # Function to handle mouse click events
 def on_mouse_click(event, x, y, flags, param):
+    global click_number
     if event == cv2.EVENT_LBUTTONDOWN:
-        # Check if the current frame already has a coordinate
-        existing_coordinates = [coord for coord in coordinates if coord[0] == current_frame]
-
-        # If there are existing coordinates for the current frame, update the last one
-        if existing_coordinates:
-            last_coord_index = coordinates.index(existing_coordinates[-1])
-            coordinates[last_coord_index] = (current_frame, x, y)
-        # If there are no existing coordinates for the current frame, append a new one
-        else:
-            coordinates.append((current_frame, x, y))
+        # Append the new click's coordinates to the coordinates list
+        coordinates.append((current_frame, click_number, x, y))
+        click_number += 1
 
         # Draw a tick mark on the frame
         cv2.line(frame, (x - 10, y - 10), (x, y), (0, 255, 0), 2)
@@ -24,7 +18,7 @@ def on_mouse_click(event, x, y, flags, param):
         cv2.imshow('Frame', frame)
 
 # Set the directory path containing the frames
-net = "net14"
+net = "net1"
 
 if os.path.exists('F:/'):
     frames_directory = 'F:/OneDrive - University of Exeter/Crab videos/waveMorpho/' + net + '/frames/real frames/female_frames'
@@ -50,7 +44,6 @@ excel_file = net + 'coordinates.xlsx'
 index = 0
 
 # Load existing coordinates from Excel file, if it exists
-excel_file = net + 'coordinates.xlsx'
 if os.path.exists(excel_file):
     coordinates_df = pd.read_excel(excel_file)
     # If the data frame is empty
@@ -64,6 +57,8 @@ if os.path.exists(excel_file):
 else:
     coordinates_df = pd.DataFrame(columns=['Frame', 'X', 'Y'])
     coordinates = []
+
+click_number = 1
 
 while index < total_frames:
     frame_filename = frames_list[index]
@@ -87,21 +82,22 @@ while index < total_frames:
     while True:
         if keyboard.is_pressed('space'):
             # Save coordinates to Excel spreadsheet
-            coordinates_df = pd.DataFrame(coordinates, columns=['Frame', 'X', 'Y'])
+            coordinates_df = pd.DataFrame(coordinates, columns=['Frame', 'Click_Number', 'X', 'Y'])
             coordinates_df.to_excel(excel_file, index=False)
             cv2.waitKey(100)  # Add a small delay after pressing the spacebar
             index += 1
+            click_number = 1
             break
         if keyboard.is_pressed('esc'):
             # Save coordinates to Excel spreadsheet
-            coordinates_df = pd.DataFrame(coordinates, columns=['Frame', 'X', 'Y'])
+            coordinates_df = pd.DataFrame(coordinates, columns=['Frame', 'Click_Number', 'X', 'Y'])
             coordinates_df.to_excel(excel_file, index=False)
             cv2.destroyAllWindows()
             exit()
         if keyboard.is_pressed('backspace'):
             # Remove clicks related to the current frame
-            coordinates = [coord for coord in coordinates if coord[0] != current_frame]
-            coordinates_df = pd.DataFrame(coordinates, columns=['Frame', 'X', 'Y'])  # Update the coordinates_df DataFrame
+            coordinates = [coord for coord in coordinates if coord[0] != current_frame and coord[0] != frames_list[index-1]]
+            coordinates_df = pd.DataFrame(coordinates, columns=['Frame', 'Click_Number', 'X', 'Y'])  # Update the coordinates_df DataFrame
             coordinates_df.to_excel(excel_file, index=False)  # Save the updated DataFrame to the Excel file
             index = max(index - 1, 0)
             cv2.waitKey(100)  # Add a small delay after pressing the backspace key
