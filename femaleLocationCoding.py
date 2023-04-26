@@ -98,7 +98,8 @@ while index < total_frames:
             # Remove clicks related to the current frame
             coordinates = [coord for coord in coordinates if coord[0] != current_frame and coord[0] != frames_list[index-1]]
             coordinates_df = pd.DataFrame(coordinates, columns=['Frame', 'Click_Number', 'X', 'Y'])  # Update the coordinates_df DataFrame
-            coordinates_df.to_excel(excel_file, index=False)  # Save the updated DataFrame to the Excel file
+            with pd.ExcelWriter(excel_file) as writer:
+                coordinates_df.to_excel(writer, index=False)  # Save the updated DataFrame to the Excel file
             index = max(index - 1, 0)
             cv2.waitKey(100)  # Add a small delay after pressing the backspace key
             break
