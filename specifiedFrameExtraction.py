@@ -3,7 +3,7 @@ import os
 import imageio
 from moviepy.editor import *
 
-net = 'net14'
+net = 'net13'
 
 if os.path.exists('F:/'):
     dir_prefix = 'F:/OneDrive - University of Exeter/Crab videos/waveMorpho/' + net + '/frames/'
@@ -18,8 +18,8 @@ except:
 
 dir_prefix = dir_prefix + 'metre stick frames/'
 
-video_path_prefix = r"D:\SKD videos\2011 Uca Networks\Network 14 04-06-2011\20110605"
-video_file = r"\20110604_122707(4)"
+video_path_prefix = r"D:\SKD videos\2011 Uca Networks\Network 13 04-06-2011\20110604"
+video_file = r"\20110604_114842(4)"
 
 video_path = video_path_prefix + video_file + r".m2ts"
 converted_video_path = video_path_prefix + video_file + r"_converted.mp4"
@@ -36,7 +36,7 @@ cam = cv2.VideoCapture(video_path)
 
 fps = int(cam.get(cv2.CAP_PROP_FPS))
 interval = fps
-start_time = (9 * 60) + 25
+start_time = (14 * 60) + 9
 start_frame = start_time * fps
 total_frames = 60
 
