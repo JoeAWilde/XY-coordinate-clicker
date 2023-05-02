@@ -1,7 +1,9 @@
 import cv2
 import os
+import imageio
+from moviepy.editor import *
 
-net = 'net2'
+net = 'net14'
 
 if os.path.exists('F:/'):
     dir_prefix = 'F:/OneDrive - University of Exeter/Crab videos/waveMorpho/' + net + '/frames/'
@@ -16,13 +18,27 @@ except:
 
 dir_prefix = dir_prefix + 'metre stick frames/'
 
-cam = cv2.VideoCapture(r"E:\SKD videos\2011 Uca Networks\Network 3 21-05-2011\20110521\20110521_120719.m2ts")
+video_path_prefix = r"D:\SKD videos\2011 Uca Networks\Network 14 04-06-2011\20110605"
+video_file = r"\20110604_122707(4)"
+
+video_path = video_path_prefix + video_file + r".m2ts"
+converted_video_path = video_path_prefix + video_file + r"_converted.mp4"
+
+if not os.path.isfile(converted_video_path):
+    # Convert the video to MP4 format
+    clip = VideoFileClip(video_path)
+    clip.write_videofile(converted_video_path, codec='libx264', audio_codec='aac')
+
+# Replace the original video path with the converted video path
+video_path = converted_video_path
+
+cam = cv2.VideoCapture(video_path)
 
 fps = int(cam.get(cv2.CAP_PROP_FPS))
 interval = fps
-start_time = (4 * 60) + 20
+start_time = (9 * 60) + 25
 start_frame = start_time * fps
-total_frames = 10
+total_frames = 60
 
 current_frame = 0
 extracted_frames = 0
