@@ -18,7 +18,8 @@ except:
 
 dir_prefix = dir_prefix + 'metre stick frames/'
 
-video_path_prefix = r"E:\SKD videos\2011 Uca Networks\Network 13 04-06-2011\20110604"
+video_path_prefix = r"D:\SKD videos\2011 Uca Networks\Network 13 04-06-2011\20110604"
+
 video_file = r"\20110604_114842(4)"
 
 video_path = video_path_prefix + video_file + r".m2ts"
@@ -36,7 +37,9 @@ cam = cv2.VideoCapture(video_path)
 
 fps = int(cam.get(cv2.CAP_PROP_FPS))
 interval = fps
+
 start_time = (14 * 60) + 7
+
 start_frame = start_time * fps
 total_frames = 60
 
